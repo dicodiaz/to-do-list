@@ -24,3 +24,7 @@ a:hover {
 .cursor-move {
   cursor: move;
 }
+
+.td-line-through {
+  text-decoration: line-through;
+}
