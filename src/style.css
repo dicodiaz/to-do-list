@@ -1,0 +1,26 @@
+input:focus {
+  outline: none;
+}
+
+img {
+  cursor: pointer;
+  opacity: 0.5;
+  transition: opacity 0.2s ease-out;
+}
+
+img:hover {
+  opacity: 1;
+}
+
+a {
+  opacity: 0.5;
+}
+
+a:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+.cursor-move {
+  cursor: move;
+}
