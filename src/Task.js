@@ -44,6 +44,10 @@ class Task {
       span.innerText = task.description;
       td1.appendChild(checkBox);
       td1.appendChild(span);
+      if (task.completed) {
+        checkBox.checked = true;
+        span.classList.add('td-line-through');
+      }
 
       const td2 = document.createElement('td');
       td2.classList.add('align-middle');
@@ -53,11 +57,39 @@ class Task {
       tr.appendChild(td1);
       tr.appendChild(td2);
       element.appendChild(tr);
+
+      checkBox.addEventListener('change', () => {
+        if (checkBox.checked) {
+          task.setCompleted(true);
+          span.classList.add('td-line-through');
+        } else {
+          task.setCompleted(false);
+          span.classList.remove('td-line-through');
+        }
+        this.saveLocalTasks();
+      });
     });
   }
 
   static sort() {
     this.tasks.sort((a, b) => a.index - b.index);
+  }
+
+  setCompleted(bool) {
+    this.completed = bool;
+  }
+
+  static saveLocalTasks() {
+    localStorage.setItem('tasks', JSON.stringify(this.tasks));
+  }
+
+  static loadLocalTasks() {
+    const tasks = JSON.parse(localStorage.getItem('tasks'));
+    if (tasks) {
+      tasks.forEach((task, i) => {
+        Task.tasks[i] = new Task(task);
+      });
+    }
   }
 }
 
