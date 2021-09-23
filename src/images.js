@@ -15,11 +15,11 @@ const appendCrossFadingImgs = (botSource, topSource, container) => {
   div.classList.add('d-flex', 'justify-content-end', 'align-items-center');
   const botImg = document.createElement('img');
   botImg.src = botSource;
-  botImg.alt = container.id + '-bot';
+  botImg.alt = `${container.id}-bot`;
   botImg.classList.add('img-fluid');
   const topImg = document.createElement('img');
   topImg.src = topSource;
-  topImg.alt = container.id + '-top';
+  topImg.alt = `${container.id}-top`;
   topImg.classList.add('cursor-pointer', 'cursor-move', 'img-fluid', 'opacity-0', 'position-absolute');
   div.appendChild(botImg);
   div.appendChild(topImg);

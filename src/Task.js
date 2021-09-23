@@ -1,4 +1,4 @@
-import { appendImg, appendCrossFadingImgs } from './images.js';
+import { appendCrossFadingImgs } from './images.js';
 import Menu from './menu.png';
 import Trash from './trash.png';
 

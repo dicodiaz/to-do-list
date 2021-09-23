@@ -3,7 +3,6 @@ import Task from './Task.js';
 import { appendImg } from './images.js';
 import Refresh from './refresh.png';
 import Enter from './enter-arrow.png';
-import { set } from 'lodash';
 
 const toDoList = document.querySelector('#to-do-list');
 const refreshContainer = document.querySelector('#refresh');
