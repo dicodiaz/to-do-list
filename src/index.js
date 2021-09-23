@@ -1,20 +1,42 @@
-// import _ from 'lodash';
 import './style.css';
-import { Task, appendImg } from './Task.js';
+import Task from './Task.js';
+import { appendImg } from './images.js';
 import Refresh from './refresh.png';
 import Enter from './enter-arrow.png';
+import { set } from 'lodash';
 
-new Task({ description: 'Wash the dishes', completed: false, index: 1 }).add();
-new Task({ description: 'Complete To Do List project', completed: false, index: 2 }).add();
-new Task({ description: 'Attend standup meeting', completed: false, index: 3 }).add();
-new Task({ description: 'Go to a barbershop', completed: false, index: 3 }).add();
 const toDoList = document.querySelector('#to-do-list');
 const refreshContainer = document.querySelector('#refresh');
 const enterContainer = document.querySelector('#enter');
+const addTask = document.querySelector('#add-task');
+const enter = document.querySelector('#enter');
+const warning = document.querySelector('#warning');
+const clearAll = document.querySelector('#clear-all');
 
 window.onload = () => {
   Task.loadLocalTasks();
-  Task.populate(toDoList);
-  appendImg(Refresh, refreshContainer, false);
-  appendImg(Enter, enterContainer, false);
+  Task.populateAll(toDoList);
+  appendImg(Refresh, refreshContainer);
+  appendImg(Enter, enterContainer);
+
+  enter.addEventListener('click', () => {
+    if (addTask.value) {
+      const task = new Task({ description: addTask.value });
+      task.add().populate(toDoList, task.index - 1);
+      addTask.value = '';
+    } else {
+      warning.classList.remove('d-none');
+      setTimeout(() => warning.classList.remove('opacity-0'), 0);
+      setTimeout(() => warning.classList.add('opacity-0'), 2000);
+      setTimeout(() => warning.classList.add('d-none'), 3000);
+    }
+  });
+
+  addTask.addEventListener('keyup', (e) => {
+    if (e.keyCode === 13) enter.click();
+  });
+
+  clearAll.addEventListener('click', () => {
+    Task.clearAllCompleted();
+  });
 };

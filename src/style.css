@@ -3,22 +3,29 @@ input:focus {
 }
 
 img {
-  cursor: pointer;
   opacity: 0.5;
-  transition: opacity 0.2s ease-out;
+  transition: opacity 0.2s ease-in-out;
 }
 
 img:hover {
   opacity: 1;
 }
 
-a {
+#clear-all {
   opacity: 0.5;
 }
 
-a:hover {
+#clear-all:hover {
   opacity: 1;
   text-decoration: underline;
+}
+
+#clear-all:focus {
+  box-shadow: none;
+}
+
+.cursor-pointer {
+  cursor: pointer;
 }
 
 .cursor-move {
@@ -27,4 +34,8 @@ a:hover {
 
 .td-line-through {
   text-decoration: line-through;
+}
+
+#warning {
+  transition: opacity 1s ease-in-out;
 }
