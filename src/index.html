@@ -18,7 +18,7 @@
                   <td id="refresh" class="align-middle"></td>
                 </tr>
                 <tr>
-                  <td><input type="text" placeholder="Add to your list..." class="border-0 w-100" /></td>
+                  <td><input id="add-task" type="text" placeholder="Add to your list..." class="border-0 w-100" /></td>
                   <td id="enter" class="align-middle"></td>
                 </tr>
               </tbody>
@@ -26,7 +26,10 @@
                 <tr>
                   <td colspan="2" class="bg-light">
                     <div class="d-flex justify-content-center">
-                      <a href="#" class="btn btn-light">Clear all completed</a>
+                      <button type="button" id="clear-all" class="btn btn-light">Clear all completed</button>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                      <small id="warning" class="d-none opacity-0 text-danger">Please write a task before adding</small>
                     </div>
                   </td>
                 </tr>
