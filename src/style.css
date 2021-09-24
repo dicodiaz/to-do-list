@@ -39,3 +39,7 @@ img:hover {
 #warning {
   transition: opacity 1s ease-in-out;
 }
+
+.table > :not(:last-child) > :last-child > * {
+  border-bottom-color: inherit;
+}
