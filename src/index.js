@@ -26,7 +26,7 @@ const dragoverHandler = (e) => {
     container.insertBefore(draggable, afterElement);
     afterElementIndex = Task.tasks.findIndex((task) => task.node === afterElement) - 1;
   }
-  if (draggableIndex > afterElementIndex) afterElementIndex++;
+  if (draggableIndex > afterElementIndex) afterElementIndex += 1;
   Task.tasks[draggableIndex].afterElementIndex = afterElementIndex;
 };
 

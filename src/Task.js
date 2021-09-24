@@ -5,7 +5,12 @@ import Trash from './trash.png';
 export default class Task {
   static tasks = [];
 
-  constructor({ description, completed = false, index = Task.tasks.length + 1, afterElementIndex = -1 }) {
+  constructor({
+    description,
+    completed = false,
+    index = Task.tasks.length + 1,
+    afterElementIndex = -1,
+  }) {
     this.description = description;
     this.completed = completed;
     this.index = index;
@@ -104,11 +109,10 @@ export default class Task {
     tr.addEventListener('dragend', () => {
       tr.classList.remove('dragging', 'bg-light');
       const trIndex = Task.tasks.findIndex((task) => task.node === tr);
-      console.log(trIndex);
-      console.log(this.afterElementIndex);
       if (trIndex !== this.afterElementIndex) {
         Task.move(trIndex, this.afterElementIndex);
       }
+      this.afterElementIndex = -1;
       Task.tasks.forEach((task, i) => {
         task.index = i + 1;
       });
@@ -123,6 +127,14 @@ export default class Task {
 
     tr.addEventListener('touchend', () => {
       tr.classList.remove('dragging', 'bg-light');
+      const trIndex = Task.tasks.findIndex((task) => task.node === tr);
+      if (trIndex !== this.afterElementIndex) {
+        Task.move(trIndex, this.afterElementIndex);
+      }
+      this.afterElementIndex = -1;
+      Task.tasks.forEach((task, i) => {
+        task.index = i + 1;
+      });
       Task.saveLocalTasks();
     });
 
@@ -187,12 +199,11 @@ export default class Task {
         const box = child.getBoundingClientRect();
         const offset = y - box.top - box.height / 2;
         if (offset < 0 && offset > closest.offset) {
-          return { offset: offset, element: child };
-        } else {
-          return closest;
+          return { offset, element: child };
         }
+        return closest;
       },
-      { offset: Number.NEGATIVE_INFINITY }
+      { offset: Number.NEGATIVE_INFINITY },
     ).element;
   }
 
