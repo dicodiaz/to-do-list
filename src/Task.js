@@ -5,15 +5,23 @@ import Trash from './trash.png';
 export default class Task {
   static tasks = [];
 
-  constructor({ description, completed = false, index = Task.tasks.length + 1 }) {
+  constructor({
+    description,
+    completed = false,
+    index = Task.tasks.length + 1,
+    afterElementIndex = -1,
+  }) {
     this.description = description;
     this.completed = completed;
     this.index = index;
+    this.afterElementIndex = afterElementIndex;
   }
 
-  populate(element, i) {
+  populate(container, i) {
     // Build tr element with 2 tds
     const tr = document.createElement('tr');
+    tr.classList.add('draggable');
+    tr.draggable = true;
     const td1 = document.createElement('td');
     const checkBox = document.createElement('input');
     checkBox.classList.add('form-check-input');
@@ -31,10 +39,10 @@ export default class Task {
     // Append tds to tr and tr to element
     tr.appendChild(td1);
     tr.appendChild(td2);
-    element.appendChild(tr);
+    container.appendChild(tr);
 
     // Add element property to this
-    this.element = tr;
+    this.node = tr;
 
     // Add interactivity to checkbox
     checkBox.addEventListener('change', () => {
@@ -66,7 +74,7 @@ export default class Task {
     imgTop.addEventListener('click', () => {
       if (!imgTop.classList.contains('cursor-move')) {
         this.remove();
-        this.element.remove();
+        this.node.remove();
       } else {
         imgBot.classList.toggle('opacity-0');
         imgTop.classList.toggle('opacity-0');
@@ -92,14 +100,52 @@ export default class Task {
       }
     });
 
+    // Add drag and drop functionality for desktop
+
+    tr.addEventListener('dragstart', () => {
+      tr.classList.add('dragging', 'bg-light');
+    });
+
+    tr.addEventListener('dragend', () => {
+      tr.classList.remove('dragging', 'bg-light');
+      const trIndex = Task.tasks.findIndex((task) => task.node === tr);
+      if (trIndex !== this.afterElementIndex) {
+        Task.move(trIndex, this.afterElementIndex);
+      }
+      this.afterElementIndex = -1;
+      Task.tasks.forEach((task, i) => {
+        task.index = i + 1;
+      });
+      Task.saveLocalTasks();
+    });
+
+    // Add drag and drop functionality for mobile
+
+    tr.addEventListener('touchstart', () => {
+      tr.classList.add('dragging', 'bg-light');
+    });
+
+    tr.addEventListener('touchend', () => {
+      tr.classList.remove('dragging', 'bg-light');
+      const trIndex = Task.tasks.findIndex((task) => task.node === tr);
+      if (trIndex !== this.afterElementIndex) {
+        Task.move(trIndex, this.afterElementIndex);
+      }
+      this.afterElementIndex = -1;
+      Task.tasks.forEach((task, i) => {
+        task.index = i + 1;
+      });
+      Task.saveLocalTasks();
+    });
+
     // Set local storage
     Task.saveLocalTasks();
   }
 
-  static populateAll(element) {
+  static populateAll(container) {
     this.sort();
     this.tasks.forEach((task, i) => {
-      task.populate(element, i);
+      task.populate(container, i);
     });
   }
 
@@ -137,12 +183,35 @@ export default class Task {
 
   static clearAllCompleted() {
     this.tasks = this.tasks.filter((task) => {
-      if (task.completed) task.element.remove();
+      if (task.completed) task.node.remove();
       return !task.completed;
     });
     this.tasks.forEach((task, i) => {
       task.index = i + 1;
     });
     this.saveLocalTasks();
+  }
+
+  static getDragAfterElement(container, y) {
+    const draggableElements = [...container.querySelectorAll('.draggable:not(.dragging)')];
+    return draggableElements.reduce(
+      (closest, child) => {
+        const box = child.getBoundingClientRect();
+        const offset = y - box.top - box.height / 2;
+        if (offset < 0 && offset > closest.offset) {
+          return { offset, element: child };
+        }
+        return closest;
+      },
+      { offset: Number.NEGATIVE_INFINITY },
+    ).element;
+  }
+
+  static swap(i, j) {
+    [this.tasks[i], this.tasks[j]] = [this.tasks[j], this.tasks[i]];
+  }
+
+  static move(from, to) {
+    this.tasks.splice(to, 0, this.tasks.splice(from, 1)[0]);
   }
 }
