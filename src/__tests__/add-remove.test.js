@@ -1,9 +1,16 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import TaskManager from '../TaskManager.js';
-import LocalStorage from '../__mocks__/localStorage.js';
+import LocalStorage from '../__mocks__/LocalStorage.js';
+
+
+
 
 global.localStorage = new LocalStorage();
 
-// document.body.innerHTML = `<table><tbody id="to-do-list"></tbody></table>`;
+// 
 
 describe('Adding and removing items', () => {
   const task = { description: 'asdf', completed: false, index: 1 };
@@ -26,3 +33,28 @@ describe('Adding and removing items', () => {
     expect(local.length).toBe(2);
   });
 });
+
+
+describe("Testing DOM Manipulation", () => {
+  const task = { description: 'asdf', completed: false, index: 1 };
+  const task2 = { description: 'Test', completed: false, index: 2 };
+  document.body.innerHTML = `<table><tbody id="to-do-list"></tbody></table>`;
+  const taskManager = new TaskManager();
+  const container = document.getElementById("to-do-list")
+
+  test("Checking DOM when adding an item", () => {
+    taskManager.populate(container, task)
+    const trs = container.querySelectorAll("tr")
+    expect(trs).toHaveLength(1)
+  })
+
+  test("Checking DOM when adding two elements", () => {
+    taskManager.populate(container, task2)
+    expect(container.querySelectorAll("tr")).toHaveLength(2)
+  })
+
+  test("Deleting an element in DOM", () => {
+    taskManager.remove(task)
+    expect(container.querySelectorAll("tr")).toHaveLength(1)
+  })
+})
