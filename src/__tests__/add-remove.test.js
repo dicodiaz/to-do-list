@@ -10,7 +10,7 @@ global.localStorage = new LocalStorage();
 const task = { description: 'asdf', completed: false, index: 1 };
 const task2 = { description: 'asdf2', completed: false, index: 2 };
 const taskManager = new TaskManager();
-document.body.innerHTML = `<table><tbody id="to-do-list"></tbody></table>`;
+document.body.innerHTML = '<table><tbody id="to-do-list"></tbody></table>';
 const container = document.getElementById('to-do-list');
 
 describe('Testing add items in the database and in local Storage', () => {
