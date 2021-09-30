@@ -1,7 +1,8 @@
 import { appendCrossFadingImgs } from './images.js';
-import Menu from './menu.png';
 import Task from './Task.js';
-import Trash from './trash.png';
+
+const Menu = './menu.png';
+const Trash = './trash.png';
 
 export default class TaskManager {
   constructor({ tasks = [] } = {}) {
