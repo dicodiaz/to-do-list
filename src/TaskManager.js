@@ -1,8 +1,4 @@
-import { appendCrossFadingImgs } from './images.js';
 import Task from './Task.js';
-
-const Menu = './menu.png';
-const Trash = './trash.png';
 
 export default class TaskManager {
   constructor({ tasks = [] } = {}) {
@@ -83,8 +79,26 @@ export default class TaskManager {
     td1.appendChild(span);
     // Build second td
     const td2 = document.createElement('td');
-    td2.classList.add('align-middle');
-    appendCrossFadingImgs(Menu, Trash, td2);
+    td2.classList.add('align-middle', 'position-relative');
+    const td2Div = document.createElement('div');
+    td2Div.classList.add('d-flex', 'justify-content-end', 'pe-1');
+    const imgBot = document.createElement('i');
+    imgBot.classList.add('fas', 'fa-ellipsis-v');
+    imgBot.alt = 'bot';
+    const imgTop = document.createElement('i');
+    imgTop.classList.add(
+      'far',
+      'fa-trash-alt',
+      'cursor-pointer',
+      'cursor-move',
+      'position-absolute',
+      'opacity-0',
+    );
+    imgTop.alt = 'top';
+    // Append imgs to td2Div and td2Div to td2
+    td2Div.appendChild(imgBot);
+    td2Div.appendChild(imgTop);
+    td2.appendChild(td2Div);
     // Append tds to tr and tr to element
     tr.appendChild(td1);
     tr.appendChild(td2);
@@ -114,16 +128,12 @@ export default class TaskManager {
     }
 
     // Add interactivity to delete buttons and deleting functionality
-    const imgBot = td2.firstElementChild.firstElementChild;
-    const imgTop = td2.firstElementChild.lastElementChild;
     const editTask = document.createElement('input');
     editTask.type = 'text';
-    editTask.classList.add('border-0', 'ps-2', 'bg-secondary', 'text-white');
+    editTask.classList.add('border-0', 'ps-2', 'bg-secondary', 'text-white', 'w-75');
 
     imgTop.addEventListener('click', () => {
-      if (!imgTop.classList.contains('cursor-move')) {
-        this.remove(task);
-      } else {
+      if (imgTop.classList.contains('cursor-move')) {
         imgBot.classList.toggle('opacity-0');
         imgTop.classList.toggle('opacity-0');
         imgTop.classList.toggle('cursor-move');
@@ -131,12 +141,15 @@ export default class TaskManager {
         editTask.value = span.innerText;
         td1.replaceChild(editTask, span);
         editTask.focus();
+      } else {
+        this.remove(task);
       }
     });
 
     // Add editing functionality
-    editTask.addEventListener('keyup', (e) => {
-      if (e.keyCode === 13) {
+
+    editTask.addEventListener('blur', () => {
+      setTimeout(() => {
         span.innerText = editTask.value;
         td1.replaceChild(span, editTask);
         imgBot.classList.toggle('opacity-0');
@@ -145,6 +158,12 @@ export default class TaskManager {
         tr.classList.remove('bg-secondary');
         task.description = editTask.value;
         this.saveLocalTasks();
+      }, 100);
+    });
+
+    editTask.addEventListener('keyup', (e) => {
+      if (e.keyCode === 13) {
+        editTask.blur();
       }
     });
 

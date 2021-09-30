@@ -1,24 +1,37 @@
 import dragoverHandler from './drag&drop.js';
-import Enter from './enter-arrow.png';
-import { appendImg } from './images.js';
-import Refresh from './refresh.png';
 import './style.css';
 import Task from './Task.js';
 import TaskManager from './TaskManager.js';
 
 const taskElementsContainer = document.querySelector('#to-do-list');
-const refreshContainer = document.querySelector('#refresh');
-const enterContainer = document.querySelector('#enter');
+const refresh = document.querySelector('#refresh');
+const alertPlaceholder = document.getElementById('liveAlertPlaceholder');
 const addTask = document.querySelector('#add-task');
 const enter = document.querySelector('#enter');
-const warning = document.querySelector('#warning');
 const clearAll = document.querySelector('#clear-all');
+const warning = document.querySelector('#warning');
 const taskManager = new TaskManager();
 
 window.onload = () => {
   taskManager.loadLocalTasks().populateAll(taskElementsContainer);
-  appendImg(Refresh, refreshContainer);
-  appendImg(Enter, enterContainer);
+
+  refresh.addEventListener('click', () => {
+    if (taskElementsContainer.innerHTML !== '') {
+      if (refresh.classList.contains('pressed-once')) {
+        refresh.classList.remove('pressed-once');
+        alertPlaceholder.innerHTML = '';
+        taskElementsContainer.innerHTML = '';
+        localStorage.clear();
+      } else {
+        refresh.classList.add('pressed-once');
+        const type = 'danger';
+        const message = 'Click again to clear all tasks.';
+        const wrapper = document.createElement('div');
+        wrapper.innerHTML = `<div class="alert alert-${type} alert-dismissible" role="alert">${message}</div>`;
+        alertPlaceholder.append(wrapper);
+      }
+    }
+  });
 
   enter.addEventListener('click', () => {
     if (addTask.value) {
