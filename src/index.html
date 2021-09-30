@@ -10,17 +10,23 @@
       integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU"
       crossorigin="anonymous"
     />
+    <script src="https://kit.fontawesome.com/8b3e10c73b.js" crossorigin="anonymous"></script>
   </head>
   <body class="bg-light">
-    <main class="">
+    <main>
       <div class="container-md min-vh-100 d-flex flex-column justify-content-center">
         <div class="row justify-content-center">
           <div class="col-11 col-md-9 col-xl-7">
+            <div id="liveAlertPlaceholder"></div>
             <table class="table shadow p-3 mb-5 bg-body rounded">
               <thead>
                 <tr>
                   <td><h1 class="h5 mb-0">Today's To Do</h1></td>
-                  <td id="refresh" class="align-middle"></td>
+                  <td class="align-middle">
+                    <div class="d-flex justify-content-start fa-flip-horizontal">
+                      <i id="refresh" class="fas fa-sync-alt fa-rotate-270 cursor-pointer"></i>
+                    </div>
+                  </td>
                 </tr>
                 <tr>
                   <td>
@@ -31,7 +37,11 @@
                       class="border-0 w-100"
                     />
                   </td>
-                  <td id="enter" class="align-middle"></td>
+                  <td class="align-middle">
+                    <div class="d-flex justify-content-end pe-1">
+                      <i id="enter" class="fas fa-level-down-alt fa-rotate-90"></i>
+                    </div>
+                  </td>
                 </tr>
               </thead>
               <tbody id="to-do-list"></tbody>

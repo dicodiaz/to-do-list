@@ -2,12 +2,12 @@ input:focus {
   outline: none;
 }
 
-img {
+i {
   opacity: 0.5;
   transition: opacity 0.2s ease-in-out;
 }
 
-img:hover {
+i:hover {
   opacity: 1;
 }
 
